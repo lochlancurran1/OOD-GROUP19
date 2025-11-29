@@ -48,6 +48,21 @@ public final class DataManager {
     }
 
 
+    /*
+    for (String[] row : data) {
+        if (row[0].equalsIgnoreCase("lecturerId")) continue;
+    
+        String id = row[0];
+        String name = row[1];
+        String email = row[2];
+        String password = row[3];
+        String department = row[4];
+        String role = row[5];
+        
+        lecturer.add(new Lecturer(id, name, email, password, department, role));
+    }
+    */
+
     public void loadLecturers(String file) {
         List<String[]> data = CSVReader.readCSV(file);
 
