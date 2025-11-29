@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Lecturer extends User {
     private final String department;
+    private String role;
     private List<String> modules;
 
     /**
@@ -15,11 +16,27 @@ public class Lecturer extends User {
      * @param password the lecturer's password
      * @param department the lecturer's department
      */
+
+    /**
+     * public Lecturer(String id, String name, String email, String password, String department) {
+     *      super(id, name, email, password, String role);
+     *      this.department = department;
+     *      this.role = role;
+     *      this.modules = new ArrayList<>();
+     * }
+     */
     public Lecturer(String id, String name, String email, String password, String department) {
-        super(id, name, email, password, "Lecturer");
+        super(id, name, email, password, "Lecturer"); 
         this.department = department;
         this.modules = new ArrayList<>();
     }
+
+    /**
+     * public String getRole() {
+     * return role;
+     * }
+     */
+    
     /**
      * Gets the lecturer's department.
      * @return the department
@@ -45,5 +62,12 @@ public class Lecturer extends User {
     @Override
     public void viewTimetable() {
         System.out.println("Timetable for Lecturer: " + name);
+
+    /**
+     * @Override
+     * public void viewTimetable() {
+     * System.out.println("Timetable for " + role + ": " + name)
+     * }
+     */
     }
 }
