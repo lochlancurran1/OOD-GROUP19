@@ -1,0 +1,32 @@
+roomId,type,capacity,building
+CSG001,teaching,250,CSIS Building
+CSG002,teaching,250,CSIS Building
+CSG003,teaching,150,CSIS Building
+CSG025,teaching,80,CSIS Building
+CSG026,teaching,80,CSIS Building
+CSG027,teaching,40,CSIS Building
+CSG028,teaching,40,CSIS Building
+CSG029,teaching,40,CSIS Building
+
+CS1044,CSlab,35,CSIS Building
+CS1045,CSlab,35,CSIS Building
+CS2044,CSlab,40,CSIS Building
+CS2045,CSlab,40,CSIS Building
+CS3005A,CSlab,30,CSIS Building
+CS3005B,CSlab,30,CSIS Building
+CS3004B,CSlab,30,CSIS Building
+CS3004A,CSlab,30,CSIS Building
+
+KBG12,teaching,150,Main Building
+KBG13,teaching,170,Main Building
+KBG14,teaching,120,Main Building
+
+FG042,teaching,120,Foundation Building
+FG043,teaching,120,Foundation Building
+
+SR3006,teaching,80,Schrödinger Building
+SR3007,teaching,80,Schrödinger Building
+SR3008,teaching,80,Schrödinger Building
+
+
+
