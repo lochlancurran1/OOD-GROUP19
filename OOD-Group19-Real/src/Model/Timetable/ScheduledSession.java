@@ -75,8 +75,23 @@ public class ScheduledSession {
                 " | " + timeslot.toString() +
                 " | Group: " + groupId;
     }
+
     public boolean sameTimeWith(ScheduledSession other) {
-        return (this.room.equals(other.room) || this.lecturer.equals(other.lecturer))
-                && this.timeslot.overlaps(other.getTimeslot());
+    if (this.timeslot == null || other.timeslot == null) return false;
+
+    boolean sameRoom = (this.room != null && this.room.equals(other.room));
+    boolean sameLecturer = (this.lecturer != null && this.lecturer.equals(other.lecturer));
+
+    // Student group conflict (ignore "ALL")
+    boolean sameGroup = false;
+    if (this.groupId != null && other.groupId != null) {
+        if (!this.groupId.equalsIgnoreCase("ALL")
+                && this.groupId.equalsIgnoreCase(other.groupId)) {
+            sameGroup = true;
+        }
+    }
+
+    return (sameRoom || sameLecturer || sameGroup)
+            && this.timeslot.overlaps(other.getTimeslot());
     }
 }
