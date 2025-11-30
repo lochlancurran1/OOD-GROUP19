@@ -12,6 +12,8 @@ public class TimetableService {
     }
 
     public void loadSessions(List<ScheduledSession> loaded) {
+        // start clean so repeated loads don't duplicate everything
+        sessions = new ArrayList<>();
         sessions.addAll(loaded);
     }
 

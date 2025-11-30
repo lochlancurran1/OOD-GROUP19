@@ -48,7 +48,8 @@ public class Room {
     }
 
     public boolean isLab() {
-        return type.equalsIgnoreCase("Laboratory");
+        // treat anything with "lab" in the type as a lab (e.g. "CSlab", "Laboratory")
+        return type != null && type.toLowerCase().contains("lab");
     }
 
 
