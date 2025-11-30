@@ -15,7 +15,7 @@ public class Module {
     private int LecHours;
     private int LabHours;
     private int tutHours;
-
+    // private List<Lecturer> lecturers = new ArrayList<>();
 
     public Module() { }
 
@@ -29,7 +29,15 @@ public class Module {
         this.LabHours = LabHours;
         this.tutHours = tutHours;
     }
+    /*
+    public void addLecturer(Lecturer lecturer) {
+        lecturers.add(lecturer);
+    }
 
+    public List<Lecturer> getLecturers() {
+        return lecturers;
+    }
+     */
 
     public void setModuleName(String moduleName) {
         this.moduleName = moduleName;
@@ -88,4 +96,13 @@ public class Module {
         return moduleCode + " - " + moduleName + " (Year " + year + ", Semester " + semester + ")" +
                 " (Lec: " + LecHours + ", Lab: " + LabHours + ", Tut: " + tutHours + ")";
     }
+    /*
+        @Override
+    public String toString() {
+        return moduleCode + " - " + moduleName +
+                " (Year " + year + ", Sem " + semester + ")" +
+                " [Lec=" + lecHours + ", Lab=" + labHours + ", Tut=" + tutHours + "] " +
+                "Lecturers: " + lecturers;
+    }
+     */
 }
