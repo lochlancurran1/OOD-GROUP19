@@ -14,14 +14,14 @@ public class Main {
         DataManager datamanager = new DataManager();
         TimetableService service = new TimetableService();
 
-        datamanager.loadStudents("data/students.csv");
-        datamanager.loadLecturers("data/lecturers.csv");
-        datamanager.loadRooms("data/rooms.csv");
-        datamanager.loadModules("data/modules.csv");
-        datamanager.loadProgrammes("data/programmes.csv");
-        datamanager.loadAdmins("data/admins.csv");
+        datamanager.loadStudents("OOD-Group19-Real/data/students.csv");
+        datamanager.loadLecturers("OOD-Group19-Real/data/lecturers.csv");
+        datamanager.loadRooms("OOD-Group19-Real/data/rooms.csv");
+        datamanager.loadModules("OOD-Group19-Real/data/modules.csv");
+        datamanager.loadProgrammes("OOD-Group19-Real/data/programmes.csv");
+        datamanager.loadAdmins("OOD-Group19-Real/data/admins.csv");
 
-        List<ScheduledSession> loadedSessions = datamanager.loadSessions("data/sessions.csv");
+        List<ScheduledSession> loadedSessions = datamanager.loadSessions("OOD-Group19-Real/data/sessions.csv");
         datamanager.sessions.addAll(loadedSessions);
         service.loadSessions(loadedSessions);
 
