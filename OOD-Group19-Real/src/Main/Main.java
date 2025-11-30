@@ -2,6 +2,7 @@ package Main;
 
 import controllers.DataManager;
 import controllers.TimetableController;
+import controllers.TimetableGenerator;
 import Model.Timetable.TimetableService;
 import View.UserInterface;
 import Model.Timetable.ScheduledSession;
@@ -21,9 +22,9 @@ public class Main {
         datamanager.loadProgrammes("OOD-Group19-Real/data/programmes.csv");
         datamanager.loadAdmins("OOD-Group19-Real/data/admins.csv");
 
-        List<ScheduledSession> loadedSessions = datamanager.loadSessions("OOD-Group19-Real/data/sessions.csv");
-        datamanager.sessions.addAll(loadedSessions);
-        service.loadSessions(loadedSessions);
+        TimetableGenerator generator = new TimetableGenerator(datamanager, service);
+        generator.generateAndLog("data/generated_timetable.csv");
+
 
         TimetableController controller = new TimetableController(service, datamanager);
 

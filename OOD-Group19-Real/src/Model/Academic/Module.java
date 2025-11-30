@@ -10,6 +10,7 @@ public class Module {
 
     private String moduleName;
     private String moduleCode;
+    private String programmeId;
     private int year;
     private int semester;
     private int LecHours;
@@ -19,10 +20,11 @@ public class Module {
 
     public Module() { }
 
-    public Module(String moduleName, String moduleCode, int year, int semester,
+    public Module(String moduleName, String moduleCode, String programmeId, int year, int semester,
                   int LecHours, int LabHours, int tutHours) {
         this.moduleName = moduleName;
         this.moduleCode = moduleCode;
+        this.programmeId = programmeId;
         this.year = year;
         this.semester = semester;
         this.LecHours = LecHours;
@@ -45,6 +47,9 @@ public class Module {
 
     public void setModuleCode(String moduleCode) {
         this.moduleCode = moduleCode;
+    }
+    public void setProgrammeId(String programmeId) {
+        this.programmeId = programmeId;
     }
 
     public void setLecHour(int LecHours) {
@@ -76,6 +81,9 @@ public class Module {
     public String getModuleCode() {
         return moduleCode;
     }
+    public String getProgrammeId() {
+        return programmeId;
+    }
 
 
     public int getLabHours() {
@@ -93,7 +101,7 @@ public class Module {
 
     @Override
     public String toString() {
-        return moduleCode + " - " + moduleName + " (Year " + year + ", Semester " + semester + ")" +
+        return moduleCode + " - " + moduleName + " (Prog " + programmeId + ") (Year " + year + ", Semester " + semester + ")" +
                 " (Lec: " + LecHours + ", Lab: " + LabHours + ", Tut: " + tutHours + ")";
     }
     /*

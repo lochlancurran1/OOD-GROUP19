@@ -70,10 +70,10 @@ public class ScheduledSession {
     @Override
     public String toString() {
         return module.getModuleCode() +
-                " | " + lecturer.getName() +
-                " | " + room.getRoomId() +
-                " | " + timeslot.toString() +
-                " | Group: " + groupId;
+                "   " + lecturer.getName() +
+                "   " + room.getRoomId() +
+                "   " + timeslot.toString() +
+                "   Group: " + groupId;
     }
 
     public boolean sameTimeWith(ScheduledSession other) {
@@ -82,7 +82,7 @@ public class ScheduledSession {
     boolean sameRoom = (this.room != null && this.room.equals(other.room));
     boolean sameLecturer = (this.lecturer != null && this.lecturer.equals(other.lecturer));
 
-    // Student group conflict (ignore "ALL")
+    
     boolean sameGroup = false;
     if (this.groupId != null && other.groupId != null) {
         if (!this.groupId.equalsIgnoreCase("ALL")

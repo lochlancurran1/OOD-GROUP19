@@ -106,7 +106,7 @@ public final class DataManager {
             int lab = Integer.parseInt(row[6]);
             int tut = Integer.parseInt(row[7]);
 
-            modules.add(new Module(name, code, year, semester, lec, lab, tut));
+            modules.add(new Module(name, code, programmeId, year, semester, lec, lab, tut));
         }
     }
 

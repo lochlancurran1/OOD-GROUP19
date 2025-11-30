@@ -53,10 +53,6 @@ public class UserInterface {
             return;
         }
 
-        if (user == null) {
-            showMessage("Invalid login.");
-            return;
-        }
 
         if (user instanceof Student s) studentMenu(s);
         else if (user instanceof Lecturer l) lecturerMenu(l);
@@ -83,11 +79,29 @@ public class UserInterface {
                     showTimetable(controller.getTimetableForStudent(s, semester));
                 }
 
-                case "0" -> loggedIn = false;
+
+                case "2" -> {
+                    String programmeId = prompt("Enter programme ID (e.g. LM174)");
+                    int year = Integer.parseInt(prompt("Enter year (e.g. 1–4)"));
+                    int semester = Integer.parseInt(prompt("Enter semester (1=Autumn, 2=Spring)"));
+                    showTimetable(controller.getTimetableForCourseYear(programmeId, year, semester));
+                }
+                case "3" -> {
+                    String moduleCode = prompt("Enter module code (e.g. CS4013)");
+                    showTimetable(controller.getTimetableForModule(moduleCode));
+                }
+                case "4" -> {
+                    String roomId = prompt("Enter room ID (e.g. CSG001)");
+                    showTimetable(controller.getTimetableForRoom(roomId));
+                }
+
+                case "5" -> loggedIn = false;
                 default -> showMessage("Invalid choice.");
             }
         }
-    }
+     }
+        
+    
 
  private void lecturerMenu(Lecturer l) {
         boolean loggedIn = true;
@@ -97,8 +111,26 @@ public class UserInterface {
             String choice = getInput();
 
             switch (choice) {
-                case "1" -> showTimetable(controller.getTimetableForLecturer(l));
-                case "0" -> loggedIn = false;
+                case "1" -> {
+                    showTimetable(controller.getTimetableForLecturer(l));
+                }
+                 case "2" -> {
+                    String programmeId = prompt("Enter programme ID (e.g. LM174)");
+                    int year = Integer.parseInt(prompt("Enter year (e.g. 1–4)"));
+                    int semester = Integer.parseInt(prompt("Enter semester (1=Autumn, 2=Spring)"));
+                    showTimetable(controller.getTimetableForCourseYear(programmeId, year, semester));
+                }
+
+                case "3" -> {
+                    String moduleCode = prompt("Enter module code (e.g. CS4013)");
+                    showTimetable(controller.getTimetableForModule(moduleCode));
+                }
+
+                case "4" -> {
+                    String roomId = prompt("Enter room ID (e.g. CSG001)");
+                    showTimetable(controller.getTimetableForRoom(roomId));
+                }
+                case "5" -> loggedIn = false;
                 default -> showMessage("Invalid choice.");
             }
         }
@@ -113,9 +145,24 @@ public class UserInterface {
 
             switch (choice) {
                 case "1" -> showTimetable(controller.getFullTimetable());
-                case "2" -> addUser();
-                case "3" -> removeUser();
-                case "0" -> loggedIn = false;
+                case "2" -> {
+                    String programmeId = prompt("Enter programme ID");
+                    int year = Integer.parseInt(prompt("Enter year (1-4)"));
+                    int semester = Integer.parseInt(prompt("Enter semester (1-Autumn, 2-Spring"));
+                    showTimetable(controller.getTimetableForCourseYear(programmeId, year, semester));
+                }
+                case "3" -> {
+                    String moduleCode = prompt("Enter module code");
+                    showTimetable(controller.getTimetableForModule(moduleCode));
+                }
+                case "4" -> {
+                    String roomId = prompt("Enter room ID");
+                    showTimetable(controller.getTimetableForRoom(roomId));
+                }
+                case "5" -> addSession();
+                case"6" -> addUser();
+                case "7" -> removeUser();
+                case "8" -> loggedIn = false;
                 default -> showMessage("Invalid choice.");
             }
         }
@@ -138,6 +185,13 @@ public class UserInterface {
  public void showUserMenu(String userType) {
         System.out.println("    " + userType + " Menu    ");
         System.out.println("1. View Timetable");
+        System.out.println("2. View course/year timetable");
+        System.out.println("3. View module timetable");
+        System.out.println("4. View room timetable");
+        System.out.println("5. Logout");
+        System.out.print("Choose an option: ");
+
+
 
         if (userType.equals("Admin")) {
             System.out.println("2. Add User");
@@ -165,5 +219,34 @@ public class UserInterface {
  public void showTimetable(String timetable) {
         System.out.println("     Timetable     ");
         System.out.println(timetable);
+ }
+ private void showAdminMenu() {
+        System.out.println("     Admin Menu    ");
+        System.out.println("1. View full timetable");
+        System.out.println("2. View course/year timetable");
+        System.out.println("3. View module timetable");
+        System.out.println("4. View room timetable");
+        System.out.println("5. Add session");
+        System.out.println("6. Add User");
+        System.out.println("7. Remove User");
+        System.out.println("8. Logout");
+        System.out.print("Choose an option: ");
+ }
+ private void addSession() {
+        showMessage("Add new session:");
+        String moduleCode = prompt("Module code");
+        String day = prompt("Day");
+        int start = Integer.parseInt(prompt("Start hour"));
+        int end = Integer.parseInt(prompt("End hour"));
+        String roomId = prompt("Room ID");
+        String lecturerId = prompt("Lecturer ID");
+        String groupId = prompt("Group ID");
+
+        boolean success = controller.addSessionAdmin(moduleCode, day, start, end, roomId, lecturerId, groupId);
+        if (success) {
+            showMessage("Session added successfully.");
+        } else {
+            showMessage("Session could not be added.");
+        }
  }
 }

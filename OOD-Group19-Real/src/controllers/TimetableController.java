@@ -7,6 +7,7 @@ import Model.Timetable.ScheduledSession;
 import Model.Timetable.TimetableService;
 import Model.Room.Room;
 import Model.Academic.Module;
+import Model.Timetable.Timeslot;
 
 import java.util.Comparator;
 import java.util.List;
@@ -145,5 +146,77 @@ public class TimetableController {
         }
         return conflicts;
     }
+     public String getTimetableForCourseYear(String programmeId, int year, int semester) {
+        StringBuilder sb = new StringBuilder();
+        for (ScheduledSession session : datamanager.sessions) {
+            Module m = session.getModule();
+            if (m == null) continue;
+
+            boolean sameProgramme = programmeId.equalsIgnoreCase("ALL")
+                    || m.getProgrammeId().equalsIgnoreCase(programmeId);
+            boolean sameYear = m.getYear() == year;
+            boolean sameSemester = m.getSemester() == semester;
+
+            if (sameProgramme && sameYear && sameSemester) {
+                sb.append(session).append("\n");
+            }
+
+        }
+        return sb.length() == 0 ? "No sessions found." : sb.toString();
+    }
+    public String getTimetableForModule(String moduleCode) {
+        StringBuilder sb = new StringBuilder();
+
+        for (ScheduledSession session : datamanager.sessions) {
+            Module m = session.getModule();
+            if (m != null && m.getModuleCode().equalsIgnoreCase(moduleCode)) {
+                sb.append(session).append("\n");
+            }
+        }
+        return sb.length() == 0 ? "No sessions found for module " + moduleCode : sb.toString();
+    }
+    public String getTimetableForRoom(String roomId) {
+        StringBuilder sb = new StringBuilder();
+        for (ScheduledSession session : datamanager.sessions) {
+            Room room = session.getRoom();
+            if (room != null && room.getRoomId().equalsIgnoreCase(roomId)) {
+                sb.append(session).append("\n");
+            }
+        }
+        return sb.length() == 0 ?"No sessions found for room " + roomId : sb.toString();
+    }
+    public boolean addSessionAdmin(String moduleCode, String day, int startHour,
+                                   int endHour, String roomId, String lecturerId,
+                                   String groupId) {
+        Module module = datamanager.findModule(moduleCode);
+        Room room = datamanager.findRoom(roomId);
+        Lecturer lecturer = datamanager.findLecturer(lecturerId);
+
+        if (module == null || room == null || lecturer == null) {
+            System.out.println("Invalid module or room or lecturer");
+            return false;
+        }
+        int duration = endHour - startHour;
+        if (duration <= 0) {
+            System.out.println("Invalid duration");
+            return false;
+        }
+
+        Timeslot slot = new Timeslot(day.toUpperCase(), startHour, duration);
+        ScheduledSession newSession = new ScheduledSession(module, lecturer, room, slot, groupId);
+
+        List<String> conflicts = service.addSession(newSession);
+        if (!conflicts.isEmpty()) {
+            System.out.println("Unable to add session.");
+            for (String conflict : conflicts) {
+                System.out.println(" - " + conflict);
+            }
+            return false;
+        }
+        datamanager.sessions.add(newSession);
+        System.out.println("Session added: " + newSession);
+        return true;
+    }
 }
+
 
