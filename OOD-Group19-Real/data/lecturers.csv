@@ -1,5 +1,5 @@
 lecturerId,name,email,password,department,role
-2001,Michael English,2001@ul.ie,pass123,CSIS,Lecturer
+2001,John O'Brien,2001@ul.ie,pass123,CSIS,Lecturer
 2002,Aoife Gallagher,2002@ul.ie,pass123,CSIS,Lecturer
 2003,Patrick Hughes,2003@ul.ie,pass123,CSIS,Lecturer
 2004,Rachel Dunne,2004@ul.ie,pass123,CSIS,Lecturer
