@@ -1,0 +1,22 @@
+lecturerId,name,email,password,department,role
+2001,John O'Brien,2001@ul.ie,pass123,CSIS,Lecturer
+2002,Aoife Gallagher,2002@ul.ie,pass123,CSIS,Lecturer
+2003,Patrick Hughes,2003@ul.ie,pass123,CSIS,Lecturer
+2004,Rachel Dunne,2004@ul.ie,pass123,CSIS,Lecturer
+2005,Conor Daly,2005@ul.ie,pass123,CSIS,Lecturer
+2006,Hannah O'Sullivan,2006@ul.ie,pass123,CSIS,Lecturer
+2007,Mark Reilly,2007@ul.ie,pass123,CSIS,Lecturer
+2008,Laura Kavanagh,2008@ul.ie,pass123,CSIS,Lecturer
+2009,Brian O'Donnell,2009@ul.ie,pass123,CSIS,Lecturer
+2010,Emma Burke,2010@ul.ie,pass123,CSIS,Lecturer
+
+3001,John Hogan,3001@ul.ie,pass123,CSIS,TA
+3002,Eimear Daly,3002@ul.ie,pass123,CSIS,TA
+3003,Alex Byrne,3003@ul.ie,pass123,CSIS,TA
+3004,Tom Keane,3004@ul.ie,pass123,CSIS,TA
+3005,Niamh O'Donnell,3005@ul.ie,pass123,CSIS,TA
+3006,Cian Murphy,3006@ul.ie,pass123,CSIS,TA
+3007,Ella Roche,3007@ul.ie,pass123,CSIS,TA
+3008,Ronan Foley,3008@ul.ie,pass123,CSIS,TA
+3009,Clodagh Finn,3009@ul.ie,pass123,CSIS,TA
+3010,Kieran Quinn,3010@ul.ie,pass123,CSIS,TA
