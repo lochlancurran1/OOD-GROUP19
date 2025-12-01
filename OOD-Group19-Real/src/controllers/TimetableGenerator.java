@@ -173,6 +173,7 @@ public class TimetableGenerator {
     }
 
     private boolean hasConflict(ScheduledSession candidate) {
+<<<<<<< Updated upstream
         for (ScheduledSession existing : generated) {
             if (existing.sameTimeWith(candidate)) return true;
 
@@ -195,7 +196,48 @@ public class TimetableGenerator {
                     }
                 }
             }
+=======
+    for (ScheduledSession existing : generated) {
+
+        
+        if (existing.sameTimeWith(candidate)) {
+            return true;
+>>>>>>> Stashed changes
         }
-        return false;
+
+        Module m1 = existing.getModule();
+        Module m2 = candidate.getModule();
+        if (m1 == null || m2 == null) continue;
+
+        
+        boolean sameProgramme = m1.getProgrammeId().equalsIgnoreCase(m2.getProgrammeId());
+        boolean sameYear = m1.getYear() == m2.getYear();
+        boolean sameSemester = m1.getSemester() == m2.getSemester();
+        if (!sameProgramme || !sameYear || !sameSemester) {
+            continue;
+        }
+
+        
+        if (!existing.getTimeslot().overlaps(candidate.getTimeslot())) {
+            continue;
+        }
+
+        
+        boolean sameModuleCode =
+                m1.getModuleCode().equalsIgnoreCase(m2.getModuleCode());
+        boolean sameGroup =
+                existing.getGroupId() != null &&
+                existing.getGroupId().equalsIgnoreCase(candidate.getGroupId());
+
+        if (sameModuleCode && !sameGroup) {
+            continue; 
+        }
+
+        
+        return true;
     }
+
+    return false;
+}
+
 }
