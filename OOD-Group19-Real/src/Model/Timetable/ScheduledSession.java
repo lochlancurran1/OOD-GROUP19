@@ -4,6 +4,10 @@ import Model.Academic.Module;
 import Model.People.Lecturer;
 import Model.Room.Room;
 
+/**
+ * Represents a single scheduled session in the timetable,
+ * containing a module, lecturer, room, timeslot and student group.
+ */
 public class ScheduledSession {
 
 
@@ -13,11 +17,19 @@ public class ScheduledSession {
     private Timeslot timeslot;
     private String groupId;
 
-
+    /** Default constructor. */
     public ScheduledSession(){
     }
 
-
+    /**
+     * Creates a scheduled session with the given details.
+     * 
+     * @param module the module being taught
+     * @param lecturer  the lecturer assigned
+     * @param room the room used
+     * @param timeslot the timeslot of the session
+     * @param groupId the student group attending
+     */
     public ScheduledSession(Module module, Lecturer lecturer, Room room, Timeslot timeslot, String groupId) {
         this.module = module;
         this.lecturer = lecturer;
@@ -26,19 +38,27 @@ public class ScheduledSession {
         this.groupId = groupId;
     }
 
+    /**
+     * Creates a scheduled session for all students
+     * 
+     * @param module the module being taught
+     * @param lecturer the lecturer assigned
+     * @param room the room used
+     * @param timeslot the timeslot of the session
+     */
     public ScheduledSession(Module module, Lecturer lecturer, Room room, Timeslot timeslot) {
         this(module, lecturer, room, timeslot, "ALL");
     }
 
     /**
-     * @return the module code for this class
+     * @return the module for this session
      */
     public Module getModule() {
         return module;
     }
 
     /**
-     * @return the name of the lecturer
+     * @return the lecturer teaching the session
      */
     public Lecturer getLecturer() {
         return lecturer;
@@ -52,7 +72,7 @@ public class ScheduledSession {
     }
 
     /**
-     * @return the time of the class
+     * @return the timeslot of the session
      */
     public Timeslot getTimeslot() {
         return timeslot;

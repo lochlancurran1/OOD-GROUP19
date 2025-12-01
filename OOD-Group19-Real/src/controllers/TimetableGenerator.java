@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Builds a timetable by placing module hours into free room/time slots.
- * Writes the result to CSV and loads it into DataManager + TimetableService.
+ * Builds an automatic timetable by placing module lecture, lab and tutorial hours into 
+ * available room/time slots and then writes the result to a CSV fil.
  */
 public class TimetableGenerator {
 
@@ -23,7 +23,13 @@ public class TimetableGenerator {
     private final DataManager data;
     private final TimetableService service;
     private final List<ScheduledSession> generated = new ArrayList<>();
-
+    
+    /**
+     * Creates a timetable generator using the data and timetable service
+     * 
+     * @param data the data storage for modules, lecturers, rooms etc
+     * @param service the timetable service which checks for conflicts
+     */
     public TimetableGenerator(DataManager data, TimetableService service) {
         this.data = data;
         this.service = service;
