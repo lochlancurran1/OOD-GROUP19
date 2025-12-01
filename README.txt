@@ -14,7 +14,7 @@ admin123
 
 lecturer login:
 2007@ul.ie
-pass123 // it must be stated that there are lecturers in the lecturers.csv that do not teach a module so will appear no sessions found if logged in to view personal timetable
+pass123 // it must be stated that there are a couple lecturers in the lecturers.csv that do not teach a module so will appear no sessions found if logged in to view personal timetable
 
 Main Menu Options
 
