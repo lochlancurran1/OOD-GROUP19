@@ -40,6 +40,7 @@ public class UserInterface {
                 default -> showMessage("Invalid option. Try again");
             }
         }
+        System.exit(0);
     }
 
     private void loginFlow() {

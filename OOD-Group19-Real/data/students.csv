@@ -1,24 +1,19 @@
 studentId,name,email,password,programme,year,groupId
-23345777,Alice Murphy,23345777@studentmail.ul.ie,pass123,LM174,1,ALL
-23346384,Ben O'Shea,23346384@studentmail.ul.ie,pass123,LM174,1,ALL
-23348921,Clara Ryan,23348921@studentmail.ul.ie,pass123,LM174,1,ALL
-23351234,Dylan Byrne,23351234@studentmail.ul.ie,pass123,LM174,1,ALL
-23357890,Ella Fitzgerald,23357890@studentmail.ul.ie,pass123,LM174,1,ALL
-
-24432555,Lochlan Curran,24432555@studentmail.ul.ie,pass123,LM174,2,ALL
-24431456,Shane Ryan,24431456@studentmail.ul.ie,pass123,LM174,2,ALL
-24432888,John Kelly,24432888@studentmail.ul.ie,pass123,LM174,2,ALL
-24436741,Megan Doyle,24436741@studentmail.ul.ie,pass123,LM174,2,ALL
-24439876,Patrick Nolan,24439876@studentmail.ul.ie,pass123,LM174,2,ALL
-
-25524747,Sarah McGrath,25524747@studentmail.ul.ie,pass123,LM174,3,ALL
-25526384,Tommy Whelan,25526384@studentmail.ul.ie,pass123,LM174,3,ALL
-25527892,Rebecca Flynn,25527892@studentmail.ul.ie,pass123,LM174,3,ALL
-25529111,Kevin O'Brien,25529111@studentmail.ul.ie,pass123,LM174,3,ALL
-
-26645253,Adam Walsh,26645253@studentmail.ul.ie,pass123,LM174,4,ALL
-26646321,Grace O'Connell,26646321@studentmail.ul.ie,pass123,LM174,4,ALL
-26647489,Liam Hogan,26647489@studentmail.ul.ie,pass123,LM174,4,ALL
-26648800,Katie Murray,26648800@studentmail.ul.ie,pass123,LM174,4,ALL
-
-
+23345777,Alice Murphy,23345777@studentmail.ul.ie,pass123,LM174,1,G1
+23346384,Ben O'Shea,23346384@studentmail.ul.ie,pass123,LM174,1,G2
+23348921,Clara Ryan,23348921@studentmail.ul.ie,pass123,LM174,1,G1
+23351234,Dylan Byrne,23351234@studentmail.ul.ie,pass123,LM174,1,G2
+23357890,Ella Fitzgerald,23357890@studentmail.ul.ie,pass123,LM174,1,G1
+24432555,Lochlan Curran,24432555@studentmail.ul.ie,pass123,LM174,2,G1
+24431456,Shane Ryan,24431456@studentmail.ul.ie,pass123,LM174,2,G2
+24432888,John Kelly,24432888@studentmail.ul.ie,pass123,LM174,2,G1
+24436741,Megan Doyle,24436741@studentmail.ul.ie,pass123,LM174,2,G2
+24439876,Patrick Nolan,24439876@studentmail.ul.ie,pass123,LM174,2,G1
+25524747,Sarah McGrath,25524747@studentmail.ul.ie,pass123,LM174,3,G1
+25526384,Tommy Whelan,25526384@studentmail.ul.ie,pass123,LM174,3,G2
+25527892,Rebecca Flynn,25527892@studentmail.ul.ie,pass123,LM174,3,G1
+25529111,Kevin O'Brien,25529111@studentmail.ul.ie,pass123,LM174,3,G2
+26645253,Adam Walsh,26645253@studentmail.ul.ie,pass123,LM174,4,G1
+26646321,Grace O'Connell,26646321@studentmail.ul.ie,pass123,LM174,4,G2
+26647489,Liam Hogan,26647489@studentmail.ul.ie,pass123,LM174,4,G1
+26648800,Katie Murray,26648800@studentmail.ul.ie,pass123,LM174,4,G2
