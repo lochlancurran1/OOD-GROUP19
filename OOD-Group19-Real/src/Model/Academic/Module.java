@@ -17,6 +17,7 @@ public class Module {
     private int LabHours;
     private int tutHours;
 
+    
     /** Empty constructor for cases where fields are set later. */
     public Module() { }
 

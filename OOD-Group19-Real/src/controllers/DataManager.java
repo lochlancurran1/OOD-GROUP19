@@ -204,4 +204,63 @@ public final class DataManager {
                 return l;
         return null;
     }
+
+    public void saveSessions(String file) {
+        List<String[]> rows = new ArrayList<>();
+        rows.add(new String[]{"sessionId", "moduleCode", "day", "start", "end", "roomId", "lecturerId", "groupId"});
+
+        int id = 1;
+        for (ScheduledSession s : sessions) {
+            String moduleCode = (s.getModule() != null) ? s.getModule().getModuleCode() : "";
+            String day = (s.getTimeslot() != null) ? s.getTimeslot().getDay() : "";
+            int start = (s.getTimeslot() != null) ? s.getTimeslot().getStartHour() : 0;
+            int end = (s.getTimeslot() != null) ? s.getTimeslot().getStartHour() + s.getTimeslot().getDuration() : start;
+            String roomId = (s.getRoom() != null) ? s.getRoom().getRoomId() : "";
+            String lecturerId = (s.getLecturer() != null) ? s.getLecturer().getLecturerId() : "";
+            String groupId = (s.getGroupId() != null) ? s.getGroupId() : "";
+
+            rows.add(new String[]{
+                    String.valueOf(id++),
+                    moduleCode,
+                    day,
+                    String.valueOf(start),
+                    String.valueOf(end),
+                    roomId,
+                    lecturerId,
+                    groupId
+            });
+        }
+        CSVWriter.writeCSV(file, rows);
+    }
+
+    public void saveStudents(String file) {
+    List<String[]> rows = new ArrayList<>();
+    rows.add(new String[]{"studentId","name","email","password","programme","year","groupId"});
+    for (Student s : students) {
+        rows.add(new String[]{
+            s.getId(), s.getName(), s.getEmail(), s.getPassword(),
+            s.getProgrammeID(), String.valueOf(s.getYear()), s.getGroupId()
+        });
+    }
+        CSVWriter.writeCSV(file, rows);
+    }
+
+    public void saveLecturers(String file) {
+        List<String[]> rows = new ArrayList<>();
+        rows.add(new String[]{"lecturerId","name","email","password","department"});
+        for (Lecturer l : lecturers) {
+            rows.add(new String[]{l.getLecturerId(), l.getName(), l.getEmail(), l.getPassword(), l.getDepartment()});
+        }
+        CSVWriter.writeCSV(file, rows);
+    }
+
+    public void saveAdmins(String file) {
+        List<String[]> rows = new ArrayList<>();
+        rows.add(new String[]{"adminId","name","email","password"});
+        for (Admin a : admins) {
+            rows.add(new String[]{a.getAdminId(), a.getName(), a.getEmail(), a.getPassword()});
+        }
+        CSVWriter.writeCSV(file, rows);
+    }
+
 }

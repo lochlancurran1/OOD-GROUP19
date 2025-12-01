@@ -28,7 +28,7 @@ public class Main {
         datamanager.loadAdmins("OOD-Group19-Real/data/admins.csv");
 
         TimetableGenerator generator = new TimetableGenerator(datamanager, service);
-        generator.generateAndLog("data/generated_timetable.csv");
+        generator.generateAndLog("OOD-Group19-Real/data/generated_timetable.csv");
 
         TimetableController controller = new TimetableController(service, datamanager);
 

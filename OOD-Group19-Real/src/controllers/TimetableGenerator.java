@@ -152,6 +152,8 @@ public class TimetableGenerator {
         for (Room room : data.rooms) {
             if (lab && !room.isLab()) continue;
             if (!lab && room.isLab()) continue;
+            int needed = requiredCapacity(groupId);
+            if (room.getCapacity() < needed) continue;
             roomCandidates.add(room);
         }
         Collections.shuffle(roomCandidates, random);
@@ -172,72 +174,36 @@ public class TimetableGenerator {
         return null;
     }
 
+    private int requiredCapacity(String groupId) {
+        if (groupId == null || groupId.equalsIgnoreCase("ALL")) return 60; // coarse default for whole cohort
+        return 30; // coarse default for sub-groups like G1/G2
+    }
+
     private boolean hasConflict(ScheduledSession candidate) {
-<<<<<<< Updated upstream
         for (ScheduledSession existing : generated) {
+            // direct room/lecturer/group overlap
             if (existing.sameTimeWith(candidate)) return true;
 
             Module m1 = existing.getModule();
             Module m2 = candidate.getModule();
+            if (m1 == null || m2 == null) continue;
 
-            if (m1 != null && m2 != null) {
-                boolean bothAllGroups =
-                        (existing.getGroupId() == null || existing.getGroupId().equalsIgnoreCase("ALL")) &&
-                        (candidate.getGroupId() == null || candidate.getGroupId().equalsIgnoreCase("ALL"));
+            boolean sameProgramme = m1.getProgrammeId().equalsIgnoreCase(m2.getProgrammeId());
+            boolean sameYear = m1.getYear() == m2.getYear();
+            boolean sameSemester = m1.getSemester() == m2.getSemester();
+            if (!sameProgramme || !sameYear || !sameSemester) continue;
 
-                if (bothAllGroups) {
-                    boolean sameProgramme = m1.getProgrammeId().equalsIgnoreCase(m2.getProgrammeId());
-                    boolean sameYear = m1.getYear() == m2.getYear();
-                    boolean sameSemester = m1.getSemester() == m2.getSemester();
+            boolean overlaps = existing.getTimeslot().overlaps(candidate.getTimeslot());
+            if (!overlaps) continue;
 
-                    if (sameProgramme && sameYear && sameSemester &&
-                            existing.getTimeslot().overlaps(candidate.getTimeslot())) {
-                        return true;
-                    }
-                }
-            }
-=======
-    for (ScheduledSession existing : generated) {
+            String g1 = existing.getGroupId();
+            String g2 = candidate.getGroupId();
+            boolean bothAll = (g1 == null || g1.equalsIgnoreCase("ALL")) &&
+                              (g2 == null || g2.equalsIgnoreCase("ALL"));
+            boolean sameGroup = g1 != null && g2 != null && g1.equalsIgnoreCase(g2);
 
-        
-        if (existing.sameTimeWith(candidate)) {
-            return true;
->>>>>>> Stashed changes
+            if (bothAll || sameGroup) return true;
         }
-
-        Module m1 = existing.getModule();
-        Module m2 = candidate.getModule();
-        if (m1 == null || m2 == null) continue;
-
-        
-        boolean sameProgramme = m1.getProgrammeId().equalsIgnoreCase(m2.getProgrammeId());
-        boolean sameYear = m1.getYear() == m2.getYear();
-        boolean sameSemester = m1.getSemester() == m2.getSemester();
-        if (!sameProgramme || !sameYear || !sameSemester) {
-            continue;
-        }
-
-        
-        if (!existing.getTimeslot().overlaps(candidate.getTimeslot())) {
-            continue;
-        }
-
-        
-        boolean sameModuleCode =
-                m1.getModuleCode().equalsIgnoreCase(m2.getModuleCode());
-        boolean sameGroup =
-                existing.getGroupId() != null &&
-                existing.getGroupId().equalsIgnoreCase(candidate.getGroupId());
-
-        if (sameModuleCode && !sameGroup) {
-            continue; 
-        }
-
-        
-        return true;
+        return false;
     }
-
-    return false;
-}
-
 }

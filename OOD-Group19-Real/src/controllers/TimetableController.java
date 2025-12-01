@@ -249,6 +249,76 @@ public class TimetableController {
                 "No sessions found for room " + roomId : sb.toString();
     }
 
+        public String getModuleSchedule(String moduleCode) {
+        StringBuilder sb = new StringBuilder();
+        for (ScheduledSession s : datamanager.sessions) {
+            Module m = s.getModule();
+            if (m != null && m.getModuleCode().equalsIgnoreCase(moduleCode)) {
+                sb.append(s).append("\n");
+            }
+        }
+        return sb.length() == 0 ? "No sessions found." : sb.toString();
+    }
+
+    public String getRoomSchedule(String roomId) {
+        StringBuilder sb = new StringBuilder();
+        for (ScheduledSession s : datamanager.sessions) {
+            if (s.getRoom() != null && s.getRoom().getRoomId().equalsIgnoreCase(roomId)) {
+                sb.append(s).append("\n");
+            }
+        }
+        return sb.length() == 0 ? "No sessions found." : sb.toString();
+    }
+
+    public String getProgrammeSchedule(String programmeId, Integer semester) {
+        StringBuilder sb = new StringBuilder();
+        for (ScheduledSession s : datamanager.sessions) {
+            Module m = s.getModule();
+            if (m == null) continue;
+            if (!m.getProgrammeId().equalsIgnoreCase(programmeId)) continue;
+            if (semester != null && m.getSemester() != semester) continue;
+            sb.append(s).append("\n");
+        }
+        return sb.length() == 0 ? "No sessions found." : sb.toString();
+    }
+
+    /** Returns all sessions with an index so admins can pick them. */
+    public String listSessionsWithIndex() {
+        if (datamanager.sessions.isEmpty()) return "No sessions found.";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < datamanager.sessions.size(); i++) {
+            sb.append(i).append(": ").append(datamanager.sessions.get(i)).append("\n");
+        }
+        return sb.toString();
+    }
+
+    /** Admin helper to remove a session by index. */
+    public boolean removeSessionByIndex(int idx) {
+        if (idx < 0 || idx >= datamanager.sessions.size()) return false;
+        ScheduledSession target = datamanager.sessions.remove(idx);
+        service.getAllSessions().remove(target);
+        return true;
+    }
+
+    /** Admin helper to update a session by index with conflict checks. */
+    public boolean updateSessionByIndex(int idx, String moduleCode, String day, int startHour,
+                                        int endHour, String roomId, String lecturerId, String groupId) {
+        if (idx < 0 || idx >= datamanager.sessions.size()) return false;
+
+        ScheduledSession old = datamanager.sessions.get(idx);
+        service.getAllSessions().remove(old);
+        datamanager.sessions.remove(idx);
+
+        boolean added = addSessionAdmin(moduleCode, day, startHour, endHour, roomId, lecturerId, groupId);
+        if (!added) {
+            // rollback
+            datamanager.sessions.add(idx, old);
+            service.getAllSessions().add(old);
+        }
+        return added;
+    }
+
+
     /**
      * Method for admins only for adding a session manually.
      * Confirms module, room, lecturer and checks for timetable conflicts.
@@ -278,6 +348,13 @@ public class TimetableController {
         int duration = endHour - startHour;
         if (duration <= 0) {
             System.out.println("Invalid duration");
+            return false;
+        }
+
+    
+        int neededCap = (groupId == null || groupId.equalsIgnoreCase("ALL")) ? 60 : 30;
+        if (room.getCapacity() < neededCap) {
+            System.out.println("Room too small for group");
             return false;
         }
 
