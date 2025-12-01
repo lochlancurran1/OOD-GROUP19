@@ -26,7 +26,7 @@ public class TimetableGenerator {
     private final DataManager data;
     private final TimetableService service;
     private final List<ScheduledSession> generated = new ArrayList<>();
-<<<<<<< HEAD
+    private final Random random = new Random();
     
     /**
      * Creates a timetable generator using the data and timetable service
@@ -34,10 +34,6 @@ public class TimetableGenerator {
      * @param data the data storage for modules, lecturers, rooms etc
      * @param service the timetable service which checks for conflicts
      */
-=======
-    private final Random random = new Random();
-
->>>>>>> 8454f1b79f0652c0a12566f2fd03f959b8a477ad
     public TimetableGenerator(DataManager data, TimetableService service) {
         this.data = data;
         this.service = service;
