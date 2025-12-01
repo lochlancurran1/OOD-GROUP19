@@ -9,6 +9,9 @@ import Model.Timetable.TimetableService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
 
 /**
  * Builds an automatic timetable by placing module lecture, lab and tutorial hours into 
@@ -23,6 +26,7 @@ public class TimetableGenerator {
     private final DataManager data;
     private final TimetableService service;
     private final List<ScheduledSession> generated = new ArrayList<>();
+<<<<<<< HEAD
     
     /**
      * Creates a timetable generator using the data and timetable service
@@ -30,6 +34,10 @@ public class TimetableGenerator {
      * @param data the data storage for modules, lecturers, rooms etc
      * @param service the timetable service which checks for conflicts
      */
+=======
+    private final Random random = new Random();
+
+>>>>>>> 8454f1b79f0652c0a12566f2fd03f959b8a477ad
     public TimetableGenerator(DataManager data, TimetableService service) {
         this.data = data;
         this.service = service;
@@ -119,20 +127,37 @@ public class TimetableGenerator {
                                              Lecturer lecturer,
                                              boolean lab,
                                              String groupId) {
-        for (String day : DAYS) {
-            for (int hour = START_HOUR; hour < END_HOUR; hour++) {
+
+        List<String> days = new ArrayList<>(Arrays.asList(DAYS));
+        Collections.shuffle(days, random);
+
+        List<Integer> hours = new ArrayList<>();
+        for (int h = START_HOUR; h < END_HOUR; h++) {
+            hours.add(h);
+        }
+        Collections.shuffle(hours, random);
+
+        List<Room> roomCandidates = new ArrayList<>();
+        int neededCapacity = requiredCapacity(groupId);
+        for (Room room : data.rooms) {
+            if (lab && !room.isLab()) continue;
+            if (!lab && room.isLab()) continue;
+            if (room.getCapacity() < neededCapacity) continue;
+            roomCandidates.add(room);
+        }
+        Collections.shuffle(roomCandidates, random);
+        
+        
+        
+         for (String day : days) {
+            for (int hour : hours) {
                 Timeslot slot = new Timeslot(day, hour, 1);
 
-                for (Room room : data.rooms) {
-                    if (lab && !room.isLab()) continue;
-                    if (!lab && room.isLab()) continue;
-                    int need = requiredCapacity(groupId);
-                    if (room.getCapacity() < need) continue;
-
+                for (Room room : roomCandidates) {
                     ScheduledSession candidate =
                             new ScheduledSession(module, lecturer, room, slot, groupId);
-
-                    if (!hasConflict(candidate)) {
+                    
+                            if (!hasConflict(candidate)) {
                         return candidate;
                     }
                 }
