@@ -9,6 +9,9 @@ import Model.Timetable.TimetableService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
 
 /**
  * Builds a timetable by placing module hours into free room/time slots.
@@ -23,6 +26,7 @@ public class TimetableGenerator {
     private final DataManager data;
     private final TimetableService service;
     private final List<ScheduledSession> generated = new ArrayList<>();
+    private final Random random = new Random();
 
     public TimetableGenerator(DataManager data, TimetableService service) {
         this.data = data;
@@ -113,20 +117,37 @@ public class TimetableGenerator {
                                              Lecturer lecturer,
                                              boolean lab,
                                              String groupId) {
-        for (String day : DAYS) {
-            for (int hour = START_HOUR; hour < END_HOUR; hour++) {
+
+        List<String> days = new ArrayList<>(Arrays.asList(DAYS));
+        Collections.shuffle(days, random);
+
+        List<Integer> hours = new ArrayList<>();
+        for (int h = START_HOUR; h < END_HOUR; h++) {
+            hours.add(h);
+        }
+        Collections.shuffle(hours, random);
+
+        List<Room> roomCandidates = new ArrayList<>();
+        int neededCapacity = requiredCapacity(groupId);
+        for (Room room : data.rooms) {
+            if (lab && !room.isLab()) continue;
+            if (!lab && room.isLab()) continue;
+            if (room.getCapacity() < neededCapacity) continue;
+            roomCandidates.add(room);
+        }
+        Collections.shuffle(roomCandidates, random);
+        
+        
+        
+         for (String day : days) {
+            for (int hour : hours) {
                 Timeslot slot = new Timeslot(day, hour, 1);
 
-                for (Room room : data.rooms) {
-                    if (lab && !room.isLab()) continue;
-                    if (!lab && room.isLab()) continue;
-                    int need = requiredCapacity(groupId);
-                    if (room.getCapacity() < need) continue;
-
+                for (Room room : roomCandidates) {
                     ScheduledSession candidate =
                             new ScheduledSession(module, lecturer, room, slot, groupId);
-
-                    if (!hasConflict(candidate)) {
+                    
+                            if (!hasConflict(candidate)) {
                         return candidate;
                     }
                 }
