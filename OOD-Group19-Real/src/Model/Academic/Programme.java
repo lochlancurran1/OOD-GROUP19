@@ -3,6 +3,10 @@ package Model.Academic;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents an academic programme in UL
+ * A programme has an ID, name and a list of semesters.
+ */
 public class Programme {
 
     private String id;

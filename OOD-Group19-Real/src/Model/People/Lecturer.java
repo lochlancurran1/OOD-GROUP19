@@ -9,7 +9,8 @@ public class Lecturer extends User {
     private List<String> modules;
 
     /**
-     * Constructor for Lecturer.
+     * Creates a lecturer object.
+     * 
      * @param id the lecturer's ID
      * @param name the lecturer's name
      * @param email the lecturer's email
@@ -17,26 +18,12 @@ public class Lecturer extends User {
      * @param department the lecturer's department
      */
 
-    /**
-     * public Lecturer(String id, String name, String email, String password, String department) {
-     *      super(id, name, email, password, String role);
-     *      this.department = department;
-     *      this.role = role;
-     *      this.modules = new ArrayList<>();
-     * }
-     */
     public Lecturer(String id, String name, String email, String password, String department) {
         super(id, name, email, password, "Lecturer"); 
         this.department = department;
         this.modules = new ArrayList<>();
     }
 
-    /**
-     * public String getRole() {
-     * return role;
-     * }
-     */
-    
     /**
      * Gets the lecturer's department.
      * @return the department
@@ -62,12 +49,5 @@ public class Lecturer extends User {
     @Override
     public void viewTimetable() {
         System.out.println("Timetable for Lecturer: " + name);
-
-    /**
-     * @Override
-     * public void viewTimetable() {
-     * System.out.println("Timetable for " + role + ": " + name)
-     * }
-     */
     }
 }

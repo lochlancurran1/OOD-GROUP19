@@ -13,17 +13,34 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
 
-
+/**
+ * The TimetableController acts as the main controller for user actions.
+ * It handles login, timetable queries, conflict checks and admin scheduling,
+ */
 public class TimetableController {
 
     private final TimetableService service;
     private final DataManager datamanager;
 
+    /**
+     * Creates a TimetableController with a timetable service and a data manager.
+     *
+     * @param service      the timetable service handling conflict logic
+     * @param datamanager  the data manager storing loaded system data
+     */
     public TimetableController(TimetableService service, DataManager datamanager) {
         this.service = service;
         this.datamanager = datamanager;
     }
 
+    /**
+     * Attempts to log a user in by checking their email and password
+     * against the stored student, lecturer and admin accounts.
+     *
+     * @param email     the email entered
+     * @param password  the password entered
+     * @return the matching user object, or null if the login fails
+     */
     public Object login(String email, String password) {
         for (Student s : datamanager.students) {
             if (s.getEmail().equals(email) && s.getPassword().equals(password)) {
@@ -45,6 +62,14 @@ public class TimetableController {
         return null;
     }
 
+    /**
+     * Gets the timetable for a specific student for a given semester.
+     * Timetable entries are filtered by year, semester and group.
+     *
+     * @param s              the student requesting the timetable
+     * @param targetSemester the semester to search
+     * @return a formatted timetable string or a 'not found' message
+     */
     public String getTimetableForStudent(Student s, int targetSemester) {
         StringBuilder sb = new StringBuilder();
 
@@ -67,9 +92,11 @@ public class TimetableController {
                 matches.add(session);
             }
         }
+
         if (matches.isEmpty()) {
             return "No sessions found.";
         }
+
         matches.sort(Comparator
                 .comparingInt((ScheduledSession sess) -> dayOrder(sess.getTimeslot().getDay()))
                 .thenComparingInt(sess -> sess.getTimeslot().getStartHour()));
@@ -80,6 +107,12 @@ public class TimetableController {
         return sb.toString();
     }
 
+    /**
+     * Retrieves all sessions taught by a specific lecturer.
+     *
+     * @param l the lecturer
+     * @return the lecturer's timetable or a 'not found' message
+     */
     public String getTimetableForLecturer(Lecturer l) {
         StringBuilder sb = new StringBuilder();
 
@@ -91,15 +124,26 @@ public class TimetableController {
         return sb.length() == 0 ? "No sessions found." : sb.toString();
     }
 
+    /**
+     * Retrieves and prints every scheduled session in the system.
+     *
+     * @return a full timetable or a 'not found' message
+     */
     public String getFullTimetable() {
         StringBuilder sb = new StringBuilder();
 
         for (ScheduledSession s : datamanager.sessions) {
-                sb.append(s).append("\n");
-            }
+            sb.append(s).append("\n");
+        }
         return sb.length() == 0 ? "No sessions found." : sb.toString();
     }
 
+    /**
+     * Adds a new session if it does not conflict with existing sessions.
+     *
+     * @param newSession the session to add
+     * @return true if added successfully, false if a conflict exists
+     */
     public boolean addSession(ScheduledSession newSession) {
         for (ScheduledSession existing : datamanager.sessions) {
             if (existing.sameTimeWith(newSession)) {
@@ -112,20 +156,13 @@ public class TimetableController {
         return true;
     }
 
-    private int dayOrder(String day) {
-        if (day == null) return 99;
-        return switch (day.toUpperCase()) {
-            case "MON" -> 1;
-            case "TUE" -> 2;
-            case "WED" -> 3;
-            case "THU" -> 4;
-            case "FRI" -> 5;
-            default -> 99;
-        };
-    }
+    /**
+     * Finds and returns all room booking conflicts across the timetable.
+     *
+     * @return a list of room conflict descriptions
+     */
     public List<String> findRoomConflicts() {
         List<String> conflicts = new ArrayList<>();
-
         List<ScheduledSession> sessions = datamanager.sessions;
 
         for (int i = 0; i < sessions.size(); i++) {
@@ -146,8 +183,18 @@ public class TimetableController {
         }
         return conflicts;
     }
-     public String getTimetableForCourseYear(String programmeId, int year, int semester) {
+
+    /**
+     * Returns the timetable for a programme year and semester.
+     *
+     * @param programmeId the programme ID or "ALL"
+     * @param year        the academic year
+     * @param semester    the semester number
+     * @return the matching sessions 
+     */
+    public String getTimetableForCourseYear(String programmeId, int year, int semester) {
         StringBuilder sb = new StringBuilder();
+
         for (ScheduledSession session : datamanager.sessions) {
             Module m = session.getModule();
             if (m == null) continue;
@@ -160,10 +207,16 @@ public class TimetableController {
             if (sameProgramme && sameYear && sameSemester) {
                 sb.append(session).append("\n");
             }
-
         }
         return sb.length() == 0 ? "No sessions found." : sb.toString();
     }
+
+    /**
+     * Returns all scheduled sessions for a specific module code.
+     *
+     * @param moduleCode the module code
+     * @return the timetable for the module
+     */
     public String getTimetableForModule(String moduleCode) {
         StringBuilder sb = new StringBuilder();
 
@@ -173,21 +226,46 @@ public class TimetableController {
                 sb.append(session).append("\n");
             }
         }
-        return sb.length() == 0 ? "No sessions found for module " + moduleCode : sb.toString();
+        return sb.length() == 0 ?
+                "No sessions found for module " + moduleCode : sb.toString();
     }
+
+    /**
+     * Returns the sessions scheduled in a specific room.
+     *
+     * @param roomId the room ID
+     * @return the timetable for the room
+     */
     public String getTimetableForRoom(String roomId) {
         StringBuilder sb = new StringBuilder();
+
         for (ScheduledSession session : datamanager.sessions) {
             Room room = session.getRoom();
             if (room != null && room.getRoomId().equalsIgnoreCase(roomId)) {
                 sb.append(session).append("\n");
             }
         }
-        return sb.length() == 0 ?"No sessions found for room " + roomId : sb.toString();
+        return sb.length() == 0 ?
+                "No sessions found for room " + roomId : sb.toString();
     }
+
+    /**
+     * Method for admins only for adding a session manually.
+     * Confirms module, room, lecturer and checks for timetable conflicts.
+     *
+     * @param moduleCode   the module code
+     * @param day          the day of the week
+     * @param startHour    session start hour
+     * @param endHour      session end hour
+     * @param roomId       room ID
+     * @param lecturerId   lecturer ID
+     * @param groupId      student group
+     * @return true if the session is added, false otherwise
+     */
     public boolean addSessionAdmin(String moduleCode, String day, int startHour,
                                    int endHour, String roomId, String lecturerId,
                                    String groupId) {
+
         Module module = datamanager.findModule(moduleCode);
         Room room = datamanager.findRoom(roomId);
         Lecturer lecturer = datamanager.findLecturer(lecturerId);
@@ -196,6 +274,7 @@ public class TimetableController {
             System.out.println("Invalid module or room or lecturer");
             return false;
         }
+
         int duration = endHour - startHour;
         if (duration <= 0) {
             System.out.println("Invalid duration");
@@ -213,10 +292,22 @@ public class TimetableController {
             }
             return false;
         }
+
         datamanager.sessions.add(newSession);
         System.out.println("Session added: " + newSession);
         return true;
     }
+
+    /** Converts day names into numbers. */
+    private int dayOrder(String day) {
+        if (day == null) return 99;
+        return switch (day.toUpperCase()) {
+            case "MON" -> 1;
+            case "TUE" -> 2;
+            case "WED" -> 3;
+            case "THU" -> 4;
+            case "FRI" -> 5;
+            default -> 99;
+        };
+    }
 }
-
-

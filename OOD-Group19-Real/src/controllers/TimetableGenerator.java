@@ -13,22 +13,39 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The TimetableGenerator builds a complete timetable by assigning sessions to free
+ * rooms and timeslots while checking for conflicts, and then outputs all generated 
+ * sessions to a CSV file for use by the system.
+ */
 public class TimetableGenerator {
 
     private static final String[] DAYS = {"MON", "TUE", "WED", "THU", "FRI"};
     private static final int START_HOUR = 9;
-    private static final int END_HOUR = 18; // last start is 17
+    private static final int END_HOUR = 18;
 
     private final DataManager data;
     private final TimetableService service;
     private final List<ScheduledSession> generated = new ArrayList<>();
     private final Random random = new Random();
 
+    /**
+     * Creates a TimetableGenerator with access to data and the timetable service.
+     *
+     * @param data     the DataManager containing modules, rooms and lecturers
+     * @param service  the timetable service used for conflict checking
+     */
     public TimetableGenerator(DataManager data, TimetableService service) {
         this.data = data;
         this.service = service;
     }
 
+    /**
+     * Generates a full timetable automatically and writes the result to a CSV file.
+     * The generated sessions are also loaded into the DataManager and TimetableService.
+     *
+     * @param outputCsvPath the file path where the generated timetable should be saved
+     */
     public void generateAndLog(String outputCsvPath) {
         generated.clear();
         List<String[]> rows = new ArrayList<>();
@@ -48,11 +65,9 @@ public class TimetableGenerator {
                 continue;
             }
 
-            // Lectures: ALL
             nextId = scheduleHours(rows, nextId, module, lecturer,
                     module.getLecHours(), false, "ALL");
 
-            // Labs: G1 & G2
             if (module.getLabHours() > 0) {
                 nextId = scheduleHours(rows, nextId, module, lecturer,
                         module.getLabHours(), true, "G1");
@@ -60,7 +75,6 @@ public class TimetableGenerator {
                         module.getLabHours(), true, "G2");
             }
 
-            // Tutorials: G1 & G2
             if (module.getTutHours() > 0) {
                 nextId = scheduleHours(rows, nextId, module, lecturer,
                         module.getTutHours(), false, "G1");
@@ -69,7 +83,6 @@ public class TimetableGenerator {
             }
         }
 
-        // Load into service + datamanager
         service.loadSessions(generated);
         data.sessions.clear();
         data.sessions.addAll(generated);
@@ -103,7 +116,6 @@ public class TimetableGenerator {
             }
 
             generated.add(session);
-
             Timeslot t = session.getTimeslot();
             int endHour = t.getStartHour() + t.getDuration();
 
@@ -118,7 +130,7 @@ public class TimetableGenerator {
                     session.getGroupId()
             });
 
-            remaining -= t.getDuration(); // 1 hour
+            remaining -= t.getDuration();
         }
 
         return nextId;
@@ -133,9 +145,7 @@ public class TimetableGenerator {
         Collections.shuffle(days, random);
 
         List<Integer> hours = new ArrayList<>();
-        for (int h = START_HOUR; h < END_HOUR; h++) {
-            hours.add(h);
-        }
+        for (int h = START_HOUR; h < END_HOUR; h++) hours.add(h);
         Collections.shuffle(hours, random);
 
         List<Room> roomCandidates = new ArrayList<>();
@@ -154,24 +164,18 @@ public class TimetableGenerator {
                     ScheduledSession candidate =
                             new ScheduledSession(module, lecturer, room, slot, groupId);
 
-                    if (!hasConflict(candidate)) {
-                        return candidate;
-                    }
+                    if (!hasConflict(candidate)) return candidate;
                 }
             }
         }
 
-        return null; // no slot found
+        return null;
     }
 
     private boolean hasConflict(ScheduledSession candidate) {
         for (ScheduledSession existing : generated) {
-            // room / lecturer / group conflict
-            if (existing.sameTimeWith(candidate)) {
-                return true;
-            }
+            if (existing.sameTimeWith(candidate)) return true;
 
-            // lecture cohort conflict (group ALL)
             Module m1 = existing.getModule();
             Module m2 = candidate.getModule();
 

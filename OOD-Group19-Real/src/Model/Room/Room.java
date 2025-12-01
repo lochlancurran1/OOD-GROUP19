@@ -14,7 +14,7 @@ public class Room {
 
 
 
-    public Room(String roomId, String type, int capacity, String buidling) {
+    public Room(String roomId, String type, int capacity, String building) {
         this.roomId = roomId;
         this.type = type;
         this.capacity = capacity;
@@ -58,7 +58,7 @@ public class Room {
 
     @Override
     public String toString() {
-        return roomId +  "Type: " + type + ", Capacity: " + capacity + "Building: " + building;
+        return roomId +  " type: " + type + ", Capacity: " + capacity + ", Building: " + building;
     }
 
 }

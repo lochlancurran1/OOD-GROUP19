@@ -11,10 +11,10 @@ import Model.Academic.Programme;
 
 import java.util.*;
 
-
 /**
- * The controllers.DataManager class is responsible for loading data from CSV files
- * and converting it into the objects used by the system.
+ * The DataManager class is responsible for loading data from CSV files
+ * and converting it into the model objects used throughout the system.
+ * It also provides simple lookup utilities for modules, rooms and lecturers.
  */
 public final class DataManager {
 
@@ -26,13 +26,16 @@ public final class DataManager {
     public List<ScheduledSession> sessions = new ArrayList<>();
     public List<Admin> admins = new ArrayList<>();
 
-
+    /**
+     * Loads student data from a CSV file and creates Student objects.
+     *
+     * @param file the path to the students CSV file
+     */
     public void loadStudents(String file) {
         List<String[]> data = CSVReader.readCSV(file);
 
         for (String[] row : data) {
             if (row[0].equalsIgnoreCase("studentId")) continue;
-
 
             String id = row[0];
             String name = row[1];
@@ -43,26 +46,14 @@ public final class DataManager {
             String groupId = row[6];
 
             students.add(new Student(id, name, email, password, programme, year, groupId));
-
         }
     }
 
-
-    /*
-    for (String[] row : data) {
-        if (row[0].equalsIgnoreCase("lecturerId")) continue;
-    
-        String id = row[0];
-        String name = row[1];
-        String email = row[2];
-        String password = row[3];
-        String department = row[4];
-        String role = row[5];
-        
-        lecturer.add(new Lecturer(id, name, email, password, department, role));
-    }
-    */
-
+    /**
+     * Loads lecturer data from a CSV file and creates Lecturer objects.
+     *
+     * @param file the path to the lecturers CSV file
+     */
     public void loadLecturers(String file) {
         List<String[]> data = CSVReader.readCSV(file);
 
@@ -70,10 +61,14 @@ public final class DataManager {
             if (row[0].equalsIgnoreCase("lecturerId")) continue;
 
             lecturers.add(new Lecturer(row[0], row[1], row[2], row[3], row[4]));
-
         }
     }
 
+    /**
+     * Loads room data from a CSV file (classrooms and labs).
+     *
+     * @param file the path to the rooms CSV file
+     */
     public void loadRooms(String file) {
         List<String[]> data = CSVReader.readCSV(file);
 
@@ -89,13 +84,16 @@ public final class DataManager {
         }
     }
 
-
+    /**
+     * Loads module data (codes, names, programme ID, hours, etc.).
+     *
+     * @param file the path to the modules CSV file
+     */
     public void loadModules(String file) {
         List<String[]> data = CSVReader.readCSV(file);
 
         for (String[] row : data) {
             if (row[0].equalsIgnoreCase("moduleCode")) continue;
-
 
             String code = row[0];
             String name = row[1];
@@ -110,6 +108,11 @@ public final class DataManager {
         }
     }
 
+    /**
+     * Loads programme IDs and names.
+     *
+     * @param file the path to the programmes CSV file
+     */
     public void loadProgrammes(String file) {
         List<String[]> data = CSVReader.readCSV(file);
 
@@ -120,15 +123,20 @@ public final class DataManager {
         }
     }
 
-
+    /**
+     * Loads scheduled sessions from a CSV file and reconstructs
+     * module, lecturer, room and timeslot links.
+     *
+     * @param file the path to the sessions CSV file
+     * @return a list of ScheduledSession objects
+     */
     public List<ScheduledSession> loadSessions(String file) {
         List<ScheduledSession> loaded = new ArrayList<>();
         List<String[]> data = CSVReader.readCSV(file);
 
         for (String[] row : data) {
-            if (row[0].equalsIgnoreCase("sessionId")) {
-                continue;
-            }
+            if (row[0].equalsIgnoreCase("sessionId")) continue;
+
             Module module = findModule(row[1]);
             int start = Integer.parseInt(row[3]);
             int end = Integer.parseInt(row[4]);
@@ -137,40 +145,63 @@ public final class DataManager {
             Room room = findRoom(row[5]);
             Lecturer lecturer = findLecturer(row[6]);
             String groupId = "ALL";
+
             loaded.add(new ScheduledSession(module, lecturer, room, timeslot, groupId));
-
-
         }
         return loaded;
     }
 
+    /**
+     * Loads admin users from a CSV file.
+     *
+     * @param file the path to the admins CSV file
+     */
     public void loadAdmins(String file) {
         List<String[]> data = CSVReader.readCSV(file);
 
         for (String[] row : data) {
             if (row[0].equalsIgnoreCase("adminId")) continue;
 
-            String id = row[0];
-            String name = row[1];
-            String email = row[2];
-            String password = row[3];
-            admins.add(new Admin(id, name, email, password));
+            admins.add(new Admin(row[0], row[1], row[2], row[3]));
         }
     }
 
+    /**
+     * Finds a module by its module code.
+     *
+     * @param code the module code
+     * @return the matching Module or null if not found
+     */
     public Module findModule(String code) {
-        for (Module m : modules) if (m.getModuleCode().equals(code)) return m;
+        for (Module m : modules)
+            if (m.getModuleCode().equals(code))
+                return m;
         return null;
     }
 
+    /**
+     * Finds a room by its ID.
+     *
+     * @param id the room ID
+     * @return the matching Room or null if not found
+     */
     public Room findRoom(String id) {
-        for (Room r : rooms) if (r.getRoomId().equals(id)) return r;
+        for (Room r : rooms)
+            if (r.getRoomId().equals(id))
+                return r;
         return null;
     }
 
+    /**
+     * Finds a lecturer by their lecturer ID.
+     *
+     * @param id the lecturer ID
+     * @return the matching Lecturer or null if not found
+     */
     public Lecturer findLecturer(String id) {
-        for (Lecturer l : lecturers) if (l.getLecturerId().equals(id)) return l;
+        for (Lecturer l : lecturers)
+            if (l.getLecturerId().equals(id))
+                return l;
         return null;
     }
 }
-
